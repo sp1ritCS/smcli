@@ -1,0 +1,61 @@
+name: smcli
+version: "0.1.0"
+author: sp1rit <sp1rit@disroot.org>
+about: prints information from schulmanager-online.de into stdout (using libschulmanager)
+args:
+  - AUTH:
+      required: true
+      index: 1
+      help: authentication method [session/o365]
+  - email:
+      long: email
+      value_name: EMAIL_ADRESS
+      takes_value: true
+      help: O365 Mailadress, overwrites env SM_MAIL
+  - password:
+      long: password
+      value_name: PASSWORD
+      takes_value: true
+      help: O365 Password, overwrites env SM_PASSWORD
+  - session:
+      long: session
+      short: s
+      value_name: SESSION
+      takes_value: true
+      help: base64 encoded passport session (session cookie), overwrites SM_SESSION
+  - session_sig:
+      long: session_sig
+      short: k
+      value_name: SESSION_SIG
+      takes_value: true
+      help: session.sig cookie, overrides SM_SESSION_SIG
+  - id:
+      long: id
+      short: u
+      value_name: Id
+      takes_value: true
+      help: student id, overrides SM_ID
+  - class_id:
+      long: class_id
+      short: i
+      value_name: classId
+      takes_value: true
+      help: class Id, overrides SM_CLASS_ID
+subcommands:
+  - timetable:
+      about: prints timetable
+      version: "1.0"
+      author: sp1rit <sp1rit@disroot.org>
+      args:
+        - week:
+            long: week
+            short: w
+            value_name: WEEK OF YEAR
+            takes_value: true
+            help: if not specified it uses the current week
+        - output:
+            long: output
+            short: o
+            value_name: TYPE
+            takes_value: true
+            help: type to be printed [yaml (default), json, curses]
