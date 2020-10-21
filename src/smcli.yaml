@@ -11,7 +11,7 @@ args:
       long: email
       value_name: EMAIL_ADRESS
       takes_value: true
-      help: O365 Mailadress, overwrites env SM_MAIL
+      help: O365 Mailadress, overwrites env SM_EMAIL
   - password:
       long: password
       value_name: PASSWORD
@@ -41,6 +41,9 @@ args:
       value_name: classId
       takes_value: true
       help: class Id, overrides SM_CLASS_ID
+  - no_cred:
+      long: disable_credentials
+      help: Use --password instead of system credential store
 subcommands:
   - timetable:
       about: prints timetable
@@ -53,9 +56,23 @@ subcommands:
             value_name: WEEK OF YEAR
             takes_value: true
             help: if not specified it uses the current week
+        - year:
+            long: year
+            short: y
+            value_name: YEAR
+            takes_value: true
+            help: if not specified it uses the current year
         - output:
             long: output
             short: o
             value_name: TYPE
             takes_value: true
             help: type to be printed [yaml (default), json, curses]
+  - credential:
+      about: saves the defined user to the system credential store
+      version: "1.0"
+      author: sp1rit <sp1rit@disroot.org>
+      args:
+          - no_secret:
+              long: no_secret_service
+              help: stores the password in plaintext in the credentials file
