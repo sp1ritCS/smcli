@@ -29,18 +29,6 @@ args:
       value_name: SESSION_SIG
       takes_value: true
       help: session.sig cookie, overrides SM_SESSION_SIG
-  - id:
-      long: id
-      short: u
-      value_name: Id
-      takes_value: true
-      help: student id, overrides SM_ID
-  - class_id:
-      long: class_id
-      short: i
-      value_name: classId
-      takes_value: true
-      help: class Id, overrides SM_CLASS_ID
   - no_cred:
       long: disable_credentials
       help: Use --password instead of system credential store
