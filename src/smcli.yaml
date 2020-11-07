@@ -50,6 +50,12 @@ subcommands:
             value_name: YEAR
             takes_value: true
             help: if not specified it uses the current year
+        - transformer:
+            long: transformer
+            short: t
+            value_name: TRANSFORMER
+            takes_value: true
+            help: uses secified timetable format [smart (default), legacy]
         - output:
             long: output
             short: o
