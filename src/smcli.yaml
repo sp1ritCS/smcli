@@ -6,7 +6,7 @@ args:
   - AUTH:
       required: true
       index: 1
-      help: authentication method [session/o365]
+      help: authentication method [session/o365/jwt]
   - email:
       long: email
       value_name: EMAIL_ADRESS
@@ -29,6 +29,12 @@ args:
       value_name: SESSION_SIG
       takes_value: true
       help: session.sig cookie, overrides SM_SESSION_SIG
+  - jwt:
+      long: jwt
+      short: t
+      value_name: JSON_WEB_TOKEN
+      takes_value: true
+      help: json web token, overwrites SM_TOKEN
   - no_cred:
       long: disable_credentials
       help: Use --password instead of system credential store

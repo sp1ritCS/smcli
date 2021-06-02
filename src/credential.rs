@@ -76,14 +76,16 @@ struct SmSession {
 pub struct CredentialConfig {
     office: Option<OfficeCredentials>,
     sm_user: Option<SmCredentials>,
-    sm_session: Option<SmSession>
+    sm_session: Option<SmSession>,
+    jwt_token: Option<String>
 }
 impl CredentialConfig {
     fn empty_creds() -> Self {
         CredentialConfig {
             office: None,
             sm_user: None,
-            sm_session: None
+            sm_session: None,
+            jwt_token: None
         }
     }
     pub fn load() -> Self {
@@ -136,6 +138,9 @@ impl CredentialConfig {
         };
         self.sm_session = Some(session)
     }
+    pub fn update_jwt_token(&mut self, token: String) {
+        self.jwt_token = Some(token)
+    }
 
     pub fn get_office_keys(&self) -> (Option<String>, Option<String>) {
         match &self.office {
@@ -151,6 +156,9 @@ impl CredentialConfig {
             Some(session) => (Some(session.session.to_string()), Some(session.session_sig.to_string())),
             None => (None, None)
         }
+    }
+    pub fn get_jwt_token(&self) -> Option<String> {
+        self.jwt_token.clone()
     }
 }
 
@@ -172,6 +180,9 @@ pub fn subcommand_credentials(matches: &ArgMatches<'_>, submatches: &ArgMatches<
     }
     if let (Some(session), Some(session_sig)) = (option_value(matches.value_of("session"), "SM_SESSION"), option_value(matches.value_of("session_sig"), "SM_SESSION_SIG")) {
         credentials.update_session(String::from(session), String::from(session_sig));
+    }
+    if let Some(jwt_token) = option_value(matches.value_of("jwt"), "SM_TOKEN") {
+        credentials.update_jwt_token(String::from(jwt_token));
     }
     // TODO: This appears to be overwriting the existing file, but it has issues with fs compression/different alignments. Maybe delete the old config first and then save?
     credentials.save()

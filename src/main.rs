@@ -52,6 +52,10 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>>{
             };
             Schulmanager::login_office(user).await?
         },
+        "jwt" => {
+            let jwt_token = credentials.get_jwt_token();
+            Schulmanager::use_jwt(option_value("JWT Token", matches.value_of("jwt"), "SM_TOKEN", jwt_token)).await?
+        }
         _ => {
             eprintln!("{} is an invalid authentication schema.\nValid schemas are: session, o365\n\nFor more info refer to the manpage", matches.value_of("AUTH").unwrap_or("invalid"));
             std::process::exit(1);
