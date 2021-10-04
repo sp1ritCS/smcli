@@ -67,16 +67,9 @@ struct SmCredentials {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct SmSession {
-    pub session: String,
-    pub session_sig: String
-}
-
-#[derive(Serialize, Deserialize, Debug)]
 pub struct CredentialConfig {
     office: Option<OfficeCredentials>,
     sm_user: Option<SmCredentials>,
-    sm_session: Option<SmSession>,
     jwt_token: Option<String>
 }
 impl CredentialConfig {
@@ -84,7 +77,6 @@ impl CredentialConfig {
         CredentialConfig {
             office: None,
             sm_user: None,
-            sm_session: None,
             jwt_token: None
         }
     }
@@ -131,13 +123,6 @@ impl CredentialConfig {
         };
         self.office = Some(office)
     }
-    pub fn update_session(&mut self, session: String, session_sig: String) {
-        let session = SmSession {
-            session,
-            session_sig
-        };
-        self.sm_session = Some(session)
-    }
     pub fn update_jwt_token(&mut self, token: String) {
         self.jwt_token = Some(token)
     }
@@ -148,12 +133,6 @@ impl CredentialConfig {
                 Ok(password) => Some(password.to_string()),
                 Err(_) => None
             }),
-            None => (None, None)
-        }
-    }
-    pub fn get_session_keys(&self) -> (Option<String>, Option<String>) {
-        match &self.sm_session {
-            Some(session) => (Some(session.session.to_string()), Some(session.session_sig.to_string())),
             None => (None, None)
         }
     }
@@ -177,9 +156,6 @@ fn option_value(param: Option<&str>, env: &str) -> Option<String> {
 pub fn subcommand_credentials(matches: &ArgMatches<'_>, submatches: &ArgMatches<'_>, credentials: &mut CredentialConfig) -> Result<(), Box<dyn std::error::Error>> {
     if let (Some(email), Some(password)) = (option_value(matches.value_of("email"), "SM_EMAIL"), option_value(matches.value_of("password"), "SM_PASSWORD")) {
         credentials.update_office(String::from(email), String::from(password), submatches.is_present("no_secret"));
-    }
-    if let (Some(session), Some(session_sig)) = (option_value(matches.value_of("session"), "SM_SESSION"), option_value(matches.value_of("session_sig"), "SM_SESSION_SIG")) {
-        credentials.update_session(String::from(session), String::from(session_sig));
     }
     if let Some(jwt_token) = option_value(matches.value_of("jwt"), "SM_TOKEN") {
         credentials.update_jwt_token(String::from(jwt_token));

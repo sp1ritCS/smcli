@@ -1,7 +1,7 @@
 mod timetable;
 mod credential;
 
-use libschulmanager::{SmSession, SmOfficeUser, Schulmanager};
+use libschulmanager::{SmOfficeUser, Schulmanager, ClientAuthMethod};
 use std::env::var;
 
 #[macro_use]
@@ -36,14 +36,6 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>>{
     }
 
     let sm = match matches.value_of("AUTH").unwrap_or("invalid") {
-        "session" => {
-            let (session, session_sig) = credentials.get_session_keys();
-            let session = SmSession {
-                session: option_value("Session", matches.value_of("session"), "SM_SESSION", session),
-                session_sig: option_value("Session sig", matches.value_of("session_sig"), "SM_SESSION_SIG", session_sig)
-            };
-            Schulmanager::use_session(session).await?
-        },
         "o365" => {
             let (email, password) = credentials.get_office_keys();
             let user = SmOfficeUser {
@@ -54,7 +46,7 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>>{
         },
         "jwt" => {
             let jwt_token = credentials.get_jwt_token();
-            Schulmanager::use_jwt(option_value("JWT Token", matches.value_of("jwt"), "SM_TOKEN", jwt_token)).await?
+            Schulmanager::new(ClientAuthMethod::JwtAuth(option_value("JWT Token", matches.value_of("jwt"), "SM_TOKEN", jwt_token))).await?
         }
         _ => {
             eprintln!("{} is an invalid authentication schema.\nValid schemas are: session, o365\n\nFor more info refer to the manpage", matches.value_of("AUTH").unwrap_or("invalid"));

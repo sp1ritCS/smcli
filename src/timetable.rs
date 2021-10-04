@@ -17,7 +17,7 @@ pub async fn subcommand_timetable(matches: &ArgMatches<'_>, sm: Schulmanager) ->
     if matches.is_present("year") {
         year = matches.value_of("year").unwrap_or(&year.to_string()).parse().expect("given year is not a number")
     }
-    let table: SmTimetable = SmTimetable::new(sm, week, Some(year)).await?;
+    let table: SmTimetable = sm.get_timetable(week, Some(year)).await?;
     let transtable = match matches.value_of("transformer").unwrap_or("smart") {
         "smart" => Transformers::Smart(table.to_smart_v2_weekdays()?),
         "smart_daymap" => Transformers::SmartDM(table.to_smart_v2_daymap()?),

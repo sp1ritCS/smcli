@@ -7,7 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-libschulmanager = { path = "../libschulmanager" }
+libschulmanager = { path = "../libschulmanager", features = ["smartv1", "smartv2", "microsoft"] }
 tokio = { version = "0.2", features = ["full"] }
 clap = {version = "2.33", features = ["yaml"]}
 serde = { version = "1.0"}

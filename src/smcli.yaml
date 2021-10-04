@@ -17,18 +17,6 @@ args:
       value_name: PASSWORD
       takes_value: true
       help: O365 Password, overwrites env SM_PASSWORD
-  - session:
-      long: session
-      short: s
-      value_name: SESSION
-      takes_value: true
-      help: base64 encoded passport session (session cookie), overwrites SM_SESSION
-  - session_sig:
-      long: session_sig
-      short: k
-      value_name: SESSION_SIG
-      takes_value: true
-      help: session.sig cookie, overrides SM_SESSION_SIG
   - jwt:
       long: jwt
       short: t
