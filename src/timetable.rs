@@ -3,9 +3,9 @@ use clap::ArgMatches;
 use chrono::{Datelike, Local};
 
 enum Transformers {
-    Legacy(Vec<SmWeek>),
-    Smart(Vec<Weekdays>),
-    SmartDM(Vec<DayMap>)
+    Legacy(SmWeek),
+    Smart(Weekdays),
+    SmartDM(DayMap)
 }
 
 pub async fn subcommand_timetable(matches: &ArgMatches<'_>, sm: Schulmanager) -> Result<(), Box<dyn std::error::Error>>{
@@ -31,15 +31,9 @@ pub async fn subcommand_timetable(matches: &ArgMatches<'_>, sm: Schulmanager) ->
     match matches.value_of("output").unwrap_or("yaml") {
         "yaml" => {
             match transtable {
-                Transformers::Smart(smart) => for s_timetable in smart {
-                    println!("{}", serde_yaml::to_string(&s_timetable)?);
-                },
-                Transformers::SmartDM(smart) => for s_timetable in smart {
-                    println!("{}", serde_yaml::to_string(&s_timetable)?);
-                },
-                Transformers::Legacy(legacy_smart) => for s_timetable in legacy_smart {
-                    println!("{}", serde_yaml::to_string(&s_timetable)?);
-                }
+                Transformers::Smart(smart) => println!("{}", serde_yaml::to_string(&smart)?),
+                Transformers::SmartDM(smart) => println!("{}", serde_yaml::to_string(&smart)?),
+                Transformers::Legacy(legacy_smart) => println!("{}", serde_yaml::to_string(&legacy_smart)?),
             }
 
         },
